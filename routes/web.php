@@ -30,13 +30,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('products', ProductController::class);
+//Route::middleware(['auth'])->group(function () {
+//    Route::resource('admin/products', ProductController::class);
+//});
+
+Route::group([], function () {
+    Route::get('/products', [ProductPurchaseController::class, 'index'])->name('products');
+    Route::get('/products/{product}/buy', [ProductPurchaseController::class, 'buy'])->name('product.buy');
+    Route::post('/cart/add/{product}', [ProductPurchaseController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart', [ProductPurchaseController::class, 'cart'])->name('cart');
+    Route::put('/cart/update/{product}', [ProductPurchaseController::class, 'updateCartItem'])->name('cart.update');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/buy', [ProductPurchaseController::class, 'index'])->name('products.buy');
-    Route::get('/products/{product}/buy', [ProductPurchaseController::class, 'buy'])->name('product.buy');
-});
 
 require __DIR__.'/auth.php';

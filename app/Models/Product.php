@@ -20,4 +20,17 @@ class Product extends Model
         'price',
         'image',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get the images associated with the product.
+     */
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }
