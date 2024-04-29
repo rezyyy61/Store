@@ -39,7 +39,6 @@ Route::group([], function () {
     Route::get('/products/{product}/buy', [ProductPurchaseController::class, 'buy'])->name('product.buy');
     Route::post('/cart/add/{product}', [ProductPurchaseController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart', [ProductPurchaseController::class, 'cart'])->name('cart');
-    Route::put('/cart/update/{product}', [ProductPurchaseController::class, 'updateCartItem'])->name('cart.update');
 });
 
 

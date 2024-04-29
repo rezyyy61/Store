@@ -78,9 +78,9 @@
                 <!-- Cart Store (or Add Products) -->
                 <div class="ml-4 sm:ml-6 relative">
                     <a href="{{ route('cart') }}" class="text-gray-700 hover:text-indigo-600">
-                        <i class="fa-solid fa-cart-shopping"></i>
+                        <i class="w-8 fa-solid fa-cart-shopping"></i>
                         @if(session('cart'))
-                            <span class="absolute top-0 right-0 inline-block bg-red-500 text-white rounded-full px-2 py-1 text-xs">{{ count(session('cart')) }}</span>
+                            <span class="absolute top-2 right-0 transform -translate-y-full inline-block bg-red-400 text-black rounded-full px-2 py-1 text-xs">{{ count(session('cart')) }}</span>
                         @endif
                     </a>
                 </div>

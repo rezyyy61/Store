@@ -24,6 +24,7 @@ class ProductPurchaseController extends Controller
     {
         $productId = $product->id;
         $quantity = $request->input('quantity', 1);
+        $selected = 1;
 
         $cart = session()->get('cart', []);
 
@@ -33,6 +34,7 @@ class ProductPurchaseController extends Controller
             $cart[$productId] = [
                 'product' => $product,
                 'quantity' => $quantity,
+                'selected' => 1,
             ];
         }
 
@@ -44,31 +46,16 @@ class ProductPurchaseController extends Controller
     public function cart()
     {
         $cartItems = session()->get('cart', []);
-        $totalPrice = 0; // Initialize total price variable
+        $totalPrice = 0;
+        $totalSelected = 0;
 
         foreach ($cartItems as $item) {
             if (isset($item['product'])) {
-                // Calculate the total price by multiplying product price with quantity
-                $totalPrice += $item['product']->price ;
+                $totalPrice += $item['product']->price;
+                $totalSelected += $item['selected'];
             }
         }
 
-        return view('products.cart', compact('cartItems', 'totalPrice'));
+        return view('products.cart', compact('cartItems', 'totalPrice', 'totalSelected'));
     }
-
-
-    public function updateCartItem(Request $request, $productId)
-    {
-
-        $cart = session()->get('cart', []);
-
-        if (array_key_exists($productId, $cart) && $cart[$productId]['quantity'] > 0) {
-            $cart[$productId]['quantity']++; // Increment quantity
-        }
-
-        session()->put('cart', $cart);
-
-        return redirect()->back();
-    }
-
 }
