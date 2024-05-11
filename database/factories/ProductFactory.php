@@ -21,6 +21,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence,
             'price' => $this->faker->randomFloat(2, 10, 1000), // Random price between 10 and 1000 with 2 decimal places
             'image' => $this->faker->imageUrl(),
+            'quantity' => '100'
         ];
     }
 }

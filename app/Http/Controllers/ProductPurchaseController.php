@@ -23,18 +23,16 @@ class ProductPurchaseController extends Controller
     public function addToCart(Request $request, Product $product)
     {
         $productId = $product->id;
-        $quantity = $request->input('quantity', 1);
-        $selected = 1;
+        $selected = $request->input('selected', 1);
 
         $cart = session()->get('cart', []);
 
         if (array_key_exists($productId, $cart)) {
-            $cart[$productId]['quantity'] += $quantity;
+            $cart[$productId]['selected'] += $selected;
         } else {
             $cart[$productId] = [
                 'product' => $product,
-                'quantity' => $quantity,
-                'selected' => 1,
+                'selected' => $selected,
             ];
         }
 
@@ -51,7 +49,7 @@ class ProductPurchaseController extends Controller
 
         foreach ($cartItems as $item) {
             if (isset($item['product'])) {
-                $totalPrice += $item['product']->price;
+                $totalPrice += $item['product']->price * $item['selected'];
                 $totalSelected += $item['selected'];
             }
         }

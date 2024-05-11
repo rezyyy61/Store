@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2); // Decimal with 10 digits, 2 of which are decimal places
-            $table->string('image')->nullable(); // New image column
+            $table->decimal('price', 10, 2);
+            $table->string('image')->nullable();
+            $table->string('quantity');
             $table->timestamps();
         });
     }

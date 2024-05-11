@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\ProductPurchaseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +40,10 @@ Route::group([], function () {
     Route::post('/cart/add/{product}', [ProductPurchaseController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart', [ProductPurchaseController::class, 'cart'])->name('cart');
 });
+
+Route::get('/payment', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+
 
 
 require __DIR__.'/auth.php';

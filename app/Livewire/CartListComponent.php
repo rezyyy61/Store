@@ -2,58 +2,56 @@
 
 namespace App\Livewire;
 
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Livewire\Component;
 
 class CartListComponent extends Component
 {
     public $cartItems = [];
     public $item;
-    public $selected = 1;
+    public $totalPrice;
+    public $totalSelected;
 
     public function mount()
     {
-        // Retrieve cart items from session
-        $this->cartItems = session()->get('cart', []);
-        // Initialize the 'selected' property for each cart item
-        foreach ($this->cartItems as $productId => $cartItem) {
-            if (!isset($cartItem['selected'])) {
-                $this->cartItems[$productId]['selected'] = 1;
-            }
+        $this->cartItems = session()->get('cart', []) ?? [];
+        $this->calculateTotals();
+    }
+
+    public function increment($productId)
+    {
+        if (isset($this->cartItems[$productId])) {
+            $this->cartItems[$productId]['selected']++;
+            $this->updateCart();
+            $this->calculateTotals();
         }
     }
 
-    public function incrementToCart(Product $product)
+    public function decrement($productId)
     {
-        $productId = $product->id;
-        $cartItem = $this->cartItems[$productId] ?? null;
-
-        if ($cartItem) {
-            $cartItem['selected'] += 1;
-            // Update the cart item in the cartItems array
-            $this->cartItems[$productId] = $cartItem;
-            session()->put('cart', $this->cartItems);
-            $this->selected = $cartItem['selected'];
-            dd($cartItem);
+        if (isset($this->cartItems[$productId]) && $this->cartItems[$productId]['selected'] > 1) {
+            $this->cartItems[$productId]['selected']--;
+            $this->updateCart();
+            $this->calculateTotals();
         }
     }
 
-    public function decrementToCart(Product $product)
+    private function updateCart()
     {
-        $productId = $product->id;
-        $cartItem = $this->cartItems[$productId] ?? null;
+        // Update the cart in the session
+        session()->put('cart', $this->cartItems);
+    }
 
-        if ($cartItem ) {
-            if ($cartItem['selected'] > 1) {
-                $cartItem['selected'] -= 1;
-                // Update the cart item in the cartItems array
-                $this->cartItems[$productId] = $cartItem;
-                session()->put('cart', $this->cartItems);
-                $this->selected = $cartItem['selected'];
-                dd($cartItem);
-            }
-        }
+    public function calculateTotals()
+    {
+        $this->totalPrice = 0;
+        $this->totalSelected = 0;
+
+        foreach ($this->cartItems as $productId => $item) {
+            // Calculate total price for each item
+            $this->totalPrice += $item['product']['price'] * $item['selected'];
+
+            // Calculate total selected items
+            $this->totalSelected += $item['selected'];}
     }
 
     public function render()
